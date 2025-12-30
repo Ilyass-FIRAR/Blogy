@@ -1,0 +1,46 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Welcome to My Blog - MyBlog{% endblock %}
+
+{% block body %}
+<div class="container">
+    <section class="hero-section text-center py-5">
+        <h1 class="display-4 fw-bold mb-4">Welcome to My Blog</h1>
+        <p class="lead text-muted mb-5">
+            Share your thoughts, ideas, and stories with the world. 
+            Discover inspiring articles and connect with our community.
+        </p>
+    </section>
+
+    <hr class="my-5">
+
+    <section class="features-section py-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">📝 Write</h5>
+                        <p class="card-text">Create and publish your own blog articles with ease.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">💬 Comment</h5>
+                        <p class="card-text">Engage with the community by sharing your thoughts on articles.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">❤️ Like</h5>
+                        <p class="card-text">Show your appreciation for great content with likes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
