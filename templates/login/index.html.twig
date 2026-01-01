@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login - Blogy{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="my-4">Login</h1>
+
+            {% if error %}
+                <div class="alert alert-danger">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            <form method="post">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input 
+                        type="email" 
+                        class="form-control" 
+                        id="email" 
+                        name="_username" 
+                        value="{{ last_username }}" 
+                        required 
+                        autofocus
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="password" 
+                        name="_password" 
+                        required
+                    >
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a href="{{ path('app_register') }}" class="btn btn-link">Create an account</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
