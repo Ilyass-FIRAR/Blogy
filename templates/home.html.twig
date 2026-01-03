@@ -1,46 +1,71 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Welcome to My Blog - MyBlog{% endblock %}
+{% block title %}Welcome to Our Blog - BlogApp{% endblock %}
 
 {% block body %}
-<div class="container">
-    <section class="hero-section text-center py-5">
-        <h1 class="display-4 fw-bold mb-4">Welcome to My Blog</h1>
-        <p class="lead text-muted mb-5">
-            Share your thoughts, ideas, and stories with the world. 
-            Discover inspiring articles and connect with our community.
+<!-- Hero Section -->
+<section class="hero-section text-center py-5" style="background-color: #f1f5f9; min-height: 400px; display: flex; align-items: center;">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-3" style="color: #1e293b;">Welcome to Our Blog</h1>
+        <p class="lead mb-5" style="color: #64748b; font-size: 1.25rem;">
+            Read, share and create articles with the community
         </p>
-    </section>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{{ path('app_articles') }}" class="btn btn-primary btn-lg px-5 py-3" style="background-color: #2563eb; border-color: #2563eb;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-book me-2" viewBox="0 0 16 16">
+                    <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+                </svg>
+                Browse Articles
+            </a>
+            <a href="{{ path('app_register') }}" class="btn btn-outline-primary btn-lg px-5 py-3 custom-btn" style="border-color: #2563eb; color: #2563eb; border-width: 2px;" >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-plus me-2" viewBox="0 0 16 16">
+                    <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                    <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+                Join Now
+            </a>
+        </div>
+    </div>
+</section>
 
-    <hr class="my-5">
-
-    <section class="features-section py-5">
-        <div class="row g-4">
+<!-- Features Section -->
+<section class="features-section py-5 bg-white">
+    <div class="container py-5">
+        <div class="row g-5 text-center">
             <div class="col-md-4">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">📝 Write</h5>
-                        <p class="card-text">Create and publish your own blog articles with ease.</p>
+                <div class="mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background-color: #dbeafe;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#2563eb" class="bi bi-book" viewBox="0 0 16 16">
+                            <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/>
+                        </svg>
                     </div>
                 </div>
+                <h4 class="fw-bold mb-3" style="color: #1e293b;">Quality Content</h4>
+                <p class="text-muted" style="color: #64748b;">Access hundreds of articles written by experts in their fields</p>
             </div>
             <div class="col-md-4">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">💬 Comment</h5>
-                        <p class="card-text">Engage with the community by sharing your thoughts on articles.</p>
+                <div class="mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background-color: #dbeafe;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#2563eb" class="bi bi-people" viewBox="0 0 16 16">
+                            <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
+                        </svg>
                     </div>
                 </div>
+                <h4 class="fw-bold mb-3" style="color: #1e293b;">Active Community</h4>
+                <p class="text-muted" style="color: #64748b;">Join discussions and connect with like-minded readers</p>
             </div>
             <div class="col-md-4">
-                <div class="card h-100 text-center">
-                    <div class="card-body">
-                        <h5 class="card-title">❤️ Like</h5>
-                        <p class="card-text">Show your appreciation for great content with likes.</p>
+                <div class="mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background-color: #dbeafe;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#2563eb" class="bi bi-graph-up-arrow" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5"/>
+                        </svg>
                     </div>
                 </div>
+                <h4 class="fw-bold mb-3" style="color: #1e293b;">Stay Updated</h4>
+                <p class="text-muted" style="color: #64748b;">Get the latest trends and insights in technology and development</p>
             </div>
         </div>
-    </section>
-</div>
+    </div>
+</section>
 {% endblock %}
