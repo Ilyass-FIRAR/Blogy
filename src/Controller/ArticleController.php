@@ -18,4 +18,13 @@ class ArticleController extends AbstractController
             'articles' => $articles,
         ]);
     }
+
+    #[Route('/articles/create', name: 'app_article_create')]
+    public function create(): Response
+    {
+        // Check if user is logged in
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        return $this->render('articles/create.html.twig');
+    }
 }
