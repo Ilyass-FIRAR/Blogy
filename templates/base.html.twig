@@ -35,9 +35,21 @@
                             <a class="nav-link" href="#">About</a>
                         </li>
                     </ul>
-                    <div class="d-flex gap-2">
+                    <div class="d-flex gap-2 align-items-center">
                         {% if app.user %}
-                            <span class="navbar-text me-2">Welcome, {{ app.user.username }}!</span>
+                            <a class="nav-link" href="{{ path('app_profile') }}" title="My Profile">
+                                {% if app.user.profilePicture %}
+                                    <img src="{{ asset('uploads/profiles/' ~ app.user.profilePicture) }}" 
+                                         alt="{{ app.user.username }}" 
+                                         class="rounded-circle"
+                                         style="width: 32px; height: 32px; object-fit: cover;">
+                                {% else %}
+                                    <span class="badge bg-secondary rounded-circle" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px;">
+                                        {{ app.user.username|first|upper }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                            <span class="navbar-text me-2">{{ app.user.username }}</span>
                             <a class="btn btn-outline-primary" href="{{ path('app_logout') }}">Logout</a>
                         {% else %}
                             <a class="btn btn-link text-decoration-none text-dark" href="{{ path('app_login') }}">Login</a>

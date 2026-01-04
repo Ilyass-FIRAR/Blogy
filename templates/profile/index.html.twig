@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h1 class="h2 mb-0">My Profile</h1>
+                        <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">
+                            Edit Profile
+                        </a>
+                    </div>
+
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-flex align-items-start mb-4">
+                        <div class="me-4">
+                            {% if user.profilePicture %}
+                                <img src="{{ asset('uploads/profiles/' ~ user.profilePicture) }}" 
+                                     alt="{{ user.username }}" 
+                                     class="rounded-circle border border-3"
+                                     style="width: 120px; height: 120px; object-fit: cover;">
+                            {% else %}
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center border border-3"
+                                     style="width: 120px; height: 120px; font-size: 48px; font-weight: bold;">
+                                    {{ user.username|first|upper }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="flex-grow-1">
+                            <h2 class="h3 mb-3">{{ user.username }}</h2>
+                            <p class="mb-2">
+                                <strong>Email:</strong> {{ user.email }}
+                            </p>
+                            <p class="mb-2">
+                                <strong>Member since:</strong> {{ user.createdAt|date('F j, Y') }}
+                            </p>
+                            <p class="mb-0">
+                                <strong>Roles:</strong> 
+                                {% for role in user.roles %}
+                                    <span class="badge bg-primary me-1">{{ role }}</span>
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h3 class="h5 mb-3">Statistics</h3>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="card bg-primary bg-opacity-10 border-primary text-center">
+                                <div class="card-body">
+                                    <div class="display-6 text-primary fw-bold">{{ user.articles|length }}</div>
+                                    <div class="text-muted">Articles</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-success bg-opacity-10 border-success text-center">
+                                <div class="card-body">
+                                    <div class="display-6 text-success fw-bold">{{ user.comments|length }}</div>
+                                    <div class="text-muted">Comments</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-info bg-opacity-10 border-info text-center">
+                                <div class="card-body">
+                                    <div class="display-6 text-info fw-bold">{{ user.likes|length }}</div>
+                                    <div class="text-muted">Likes</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h3 class="h5 mb-3">Recent Articles</h3>
+                    {% if user.articles|length > 0 %}
+                        <div class="list-group">
+                            {% for article in user.articles|slice(0, 5) %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-1">{{ article.title }}</h5>
+                                        <small class="text-muted">{{ article.createdAt|date('M j, Y') }}</small>
+                                    </div>
+                                    <div class="text-muted">
+                                        <small>{{ article.comments|length }} comments · {{ article.likes|length }} likes</small>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted fst-italic">No articles yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
