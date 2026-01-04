@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Profile{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h1 class="h2 mb-0">Edit Profile</h1>
+                        <a href="{{ path('app_profile') }}" class="text-decoration-none">
+                            ← Back to Profile
+                        </a>
+                    </div>
+
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+
+                    <form action="{{ path('app_profile_update') }}" method="POST" enctype="multipart/form-data">
+                        <!-- Profile Picture Section -->
+                        <div class="mb-4 pb-4 border-bottom">
+                            <label class="form-label fw-bold">Profile Picture</label>
+                            
+                            <div class="d-flex align-items-center gap-4">
+                                <div>
+                                    {% if user.profilePicture %}
+                                        <img src="{{ asset('uploads/profiles/' ~ user.profilePicture) }}" 
+                                             alt="{{ user.username }}" 
+                                             class="rounded-circle border border-2"
+                                             style="width: 100px; height: 100px; object-fit: cover;"
+                                             id="profile-preview">
+                                    {% else %}
+                                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center border border-2"
+                                             style="width: 100px; height: 100px; font-size: 40px; font-weight: bold;"
+                                             id="profile-preview-container">
+                                            <span id="profile-initial">{{ user.username|first|upper }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="flex-grow-1">
+                                    <input type="file" 
+                                           name="profile_picture" 
+                                           id="profile_picture"
+                                           accept="image/*"
+                                           class="form-control">
+                                    <div class="form-text">JPG, PNG, GIF or WEBP (MAX. 5MB)</div>
+                                    
+                                    {% if user.profilePicture %}
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger mt-2"
+                                                onclick="if(confirm('Are you sure you want to delete your profile picture?')) { document.getElementById('delete-picture-form').submit(); }">
+                                            Remove current picture
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Username Field -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" 
+                                   name="username" 
+                                   id="username" 
+                                   value="{{ user.username }}"
+                                   required
+                                   minlength="3"
+                                   maxlength="180"
+                                   class="form-control">
+                        </div>
+
+                        <!-- Email Field -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" 
+                                   name="email" 
+                                   id="email" 
+                                   value="{{ user.email }}"
+                                   required
+                                   class="form-control">
+                        </div>
+
+                        <!-- Account Information -->
+                        <div class="alert alert-light mb-4">
+                            <h6 class="alert-heading">Account Information</h6>
+                            <p class="mb-1 small">Member since: {{ user.createdAt|date('F j, Y') }}</p>
+                            <p class="mb-0 small">
+                                Roles: 
+                                {% for role in user.roles %}
+                                    <span class="badge bg-secondary">{{ role }}</span>
+                                {% endfor %}
+                            </p>
+                        </div>
+
+                        <!-- CSRF Token -->
+                        <input type="hidden" name="_token" value="{{ csrf_token('profile_update') }}">
+
+                        <!-- Submit Button -->
+                        <div class="d-flex justify-content-between align-items-center pt-3">
+                            <a href="{{ path('app_profile') }}" class="btn btn-link text-decoration-none">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Hidden form for deleting profile picture -->
+                    <form id="delete-picture-form" action="{{ path('app_profile_delete_picture') }}" method="POST" style="display: none;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_picture') }}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Preview profile picture before upload
+    document.getElementById('profile_picture').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewContainer = document.getElementById('profile-preview-container');
+                const previewImg = document.getElementById('profile-preview');
+                
+                if (previewImg) {
+                    // Update existing image
+                    previewImg.src = e.target.result;
+                } else if (previewContainer) {
+                    // Replace initial with image
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'rounded-circle border border-2';
+                    img.style.width = '100px';
+                    img.style.height = '100px';
+                    img.style.objectFit = 'cover';
+                    img.id = 'profile-preview';
+                    previewContainer.parentNode.replaceChild(img, previewContainer);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+{% endblock %}
