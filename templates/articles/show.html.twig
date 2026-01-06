@@ -57,6 +57,28 @@
                             </form>
                         </div>
                     {% endif %}
+
+                    <!-- Like/Unlike buttons -->
+                    {% if app.user %}
+                        {% set userLiked = article.likes|filter(l => l.user.id == app.user.id)|length > 0 %}
+                        <div class="btn-group" role="group">
+                            {% if not userLiked %}
+                                <form method="post" action="{{ path('app_article_like', {id: article.id}) }}" style="display:inline;">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('submit') }}">
+                                    <button type="submit" class="btn btn-outline-danger">
+                                        ❤️ Like
+                                    </button>
+                                </form>
+                            {% else %}
+                                <form method="post" action="{{ path('app_article_unlike', {id: article.id}) }}" style="display:inline;">
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('submit') }}">
+                                    <button type="submit" class="btn btn-outline-secondary">
+                                        💔 Unlike
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 </footer>
             </article>
 
