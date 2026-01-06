@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ArticleController extends AbstractController
 {
-    #[Route('/articles', name: 'app_articles')]
+    #[Route('/articles', name: 'app_articles', methods: ['GET'])]
     public function list(ArticleRepository $articleRepository): Response
     {
         $articles = $articleRepository->findAll();

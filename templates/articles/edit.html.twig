@@ -43,6 +43,8 @@
                     <small class="text-muted">Update your article content here</small>
                 </div>
 
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('submit') }}">
+
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary btn-lg">
                         <i class="bi bi-check-circle"></i> Update Article
