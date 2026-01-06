@@ -111,6 +111,7 @@
                                     <p class="card-text">{{ comment.content }}</p>
                                     {% if app.user and app.user.id == comment.user.id %}
                                         <form method="post" action="{{ path('app_comment_delete', {id: comment.id}) }}" style="display:inline;" onsubmit="return confirm('Delete this comment?');">
+                                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('submit') }}">
                                             <button type="submit" class="btn btn-sm btn-danger">
                                                 <i class="bi bi-trash"></i> Delete
                                             </button>

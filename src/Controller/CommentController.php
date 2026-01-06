@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Comment;
-use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +15,7 @@ class CommentController extends AbstractController
 {
     #[Route('/articles/{articleId}/comments', name: 'app_comment_store', methods: ['POST'])]
     public function store(
-        Article $article,
+        #[MapEntity(mapping: ['articleId' => 'id'])] Article $article,
         Request $request,
         EntityManagerInterface $entityManager
     ): Response {
