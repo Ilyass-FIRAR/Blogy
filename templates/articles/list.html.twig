@@ -1,24 +1,42 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Articles - MyBlog{% endblock %}
+{% block title %}Articles - Blogy{% endblock %}
 
 {% block body %}
-<div class="container">
-    <section class="articles-section py-5">
-        <h1 class="mb-5">Blog Articles</h1>
+<div class="container py-5">
+    <section class="articles-section">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h1>📚 Blog Articles</h1>
+            {% if app.user %}
+                <a href="{{ path('app_article_create') }}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-plus-circle"></i> Create Article
+                </a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-outline-primary btn-lg">
+                    Login to Create Article
+                </a>
+            {% endif %}
+        </div>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
 
         {% if articles|length > 0 %}
             <div class="row g-4">
                 {% for article in articles %}
                     <div class="col-md-6 col-lg-4">
-                        <div class="card h-100">
-                            <div class="card-body">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">{{ article.title }}</h5>
-                                <p class="card-text text-muted small">
+                                <p class="card-text text-muted small mb-2">
                                     By <strong>{{ article.user.email }}</strong> 
                                     on <em>{{ article.createdAt|date('d/m/Y') }}</em>
                                 </p>
-                                <p class="card-text">
+                                <p class="card-text flex-grow-1">
                                     {{ article.content|slice(0, 100) }}{% if article.content|length > 100 %}...{% endif %}
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center">
@@ -35,9 +53,14 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="alert alert-info" role="alert">
+            <div class="alert alert-info text-center py-5" role="alert">
                 <h4 class="alert-heading">No Articles Yet</h4>
                 <p>There are currently no blog articles. Check back soon!</p>
+                {% if app.user %}
+                    <a href="{{ path('app_article_create') }}" class="btn btn-info mt-2">
+                        <i class="bi bi-pencil"></i> Write the First Article
+                    </a>
+                {% endif %}
             </div>
         {% endif %}
     </section>

@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Article - Blogy{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-4">✍️ Create New Article</h1>
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+
+            <form method="post" action="{{ path('app_article_store') }}">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Article Title</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="title" 
+                        name="title" 
+                        required
+                        minlength="3"
+                        maxlength="255"
+                        placeholder="Enter your article title">
+                    <small class="text-muted">Minimum 3 characters, maximum 255</small>
+                </div>
+
+                <div class="mb-3">
+                    <label for="content" class="form-label">Article Content</label>
+                    <textarea 
+                        class="form-control" 
+                        id="content" 
+                        name="content" 
+                        rows="12"
+                        required
+                        placeholder="Write your article here..."></textarea>
+                    <small class="text-muted">Share your thoughts, ideas, and stories</small>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-upload"></i> Publish Article
+                    </button>
+                    <a href="{{ path('app_articles') }}" class="btn btn-secondary btn-lg">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
