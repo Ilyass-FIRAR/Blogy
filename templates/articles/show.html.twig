@@ -77,7 +77,11 @@
                                     </button>
                                 </form>
                             {% endif %}
+                            <button type="button" class="btn btn-outline-primary" onclick="copyArticleLink()">
+                                🔗 Share
+                            </button>
                         </div>
+                        <div id="share-toast" class="text-success small mt-2 d-none">Link copied to clipboard</div>
                     {% endif %}
                 </footer>
             </article>
@@ -150,4 +154,33 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function copyArticleLink() {
+            if (!navigator.clipboard || !window.isSecureContext) {
+                const temp = document.createElement('input');
+                temp.value = window.location.href;
+                document.body.appendChild(temp);
+                temp.select();
+                document.execCommand('copy');
+                document.body.removeChild(temp);
+                showShareToast();
+                return;
+            }
+
+            navigator.clipboard.writeText(window.location.href)
+                .then(showShareToast)
+                .catch(() => showShareToast());
+        }
+
+        function showShareToast() {
+            const toast = document.getElementById('share-toast');
+            if (!toast) return;
+            toast.classList.remove('d-none');
+            setTimeout(() => toast.classList.add('d-none'), 2000);
+        }
+    </script>
 {% endblock %}
