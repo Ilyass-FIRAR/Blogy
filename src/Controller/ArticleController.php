@@ -67,9 +67,9 @@ class ArticleController extends AbstractController
     public function edit(Article $article): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        
-        // Check if user is the author
-        if ($article->getUser() !== $this->getUser()) {
+
+        // Allow admins to edit any article; others can only edit their own
+        if (!$this->isGranted('ROLE_ADMIN') && $article->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException('You can only edit your own articles.');
         }
 
@@ -82,9 +82,9 @@ class ArticleController extends AbstractController
     public function update(Article $article, Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        
-        // Check if user is the author
-        if ($article->getUser() !== $this->getUser()) {
+
+        // Allow admins to update any article; others can only update their own
+        if (!$this->isGranted('ROLE_ADMIN') && $article->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException('You can only edit your own articles.');
         }
 
@@ -106,13 +106,17 @@ class ArticleController extends AbstractController
     }
 
     #[Route('/articles/{id}/delete', name: 'app_article_delete', methods: ['POST'])]
-    public function delete(Article $article, EntityManagerInterface $entityManager): Response
+    public function delete(Article $article, Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        
-        // Check if user is the author
-        if ($article->getUser() !== $this->getUser()) {
+
+        // Allow admins to delete any article; others can only delete their own
+        if (!$this->isGranted('ROLE_ADMIN') && $article->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException('You can only delete your own articles.');
+        }
+
+        if (!$this->isCsrfTokenValid('delete-article'.$article->getId(), $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid delete token.');
         }
 
         $entityManager->remove($article);

