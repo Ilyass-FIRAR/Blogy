@@ -37,6 +37,9 @@
                     </ul>
                     <div class="d-flex gap-2">
                         {% if app.user %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <a class="btn btn-outline-secondary" href="{{ path('app_admin_dashboard') }}">Admin</a>
+                            {% endif %}
                             <span class="navbar-text me-2">Welcome, {{ app.user.username }}!</span>
                             <a class="btn btn-outline-primary" href="{{ path('app_logout') }}">Logout</a>
                         {% else %}
