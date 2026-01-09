@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,22 +27,23 @@ class RegistrationController extends AbstractController
         $error = null;
 
         if ($request->isMethod('POST')) {
-            $email = $request->request->get('email');
-            $username = $request->request->get('username');
-            $password = $request->request->get('password');
-            $confirmPassword = $request->request->get('confirm_password');
-
-            // Basic validation
-            if (empty($email) || empty($username) || empty($password)) {
-                $error = 'All fields are required.';
-            } elseif ($password !== $confirmPassword) {
-                $error = 'Passwords do not match.';
-            } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $error = 'Invalid email address.';
+            // Validate CSRF token
+            if (!$this->isCsrfTokenValid('register', $request->request->get('_csrf_token'))) {
+                $error = 'Invalid CSRF token.';
             } else {
-                // Check if email already exists
-                $existingUserByEmail = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-                if ($existingUserByEmail) {
+                $email = trim((string) $request->request->get('email'));
+                $username = trim((string) $request->request->get('username'));
+                $password = (string) $request->request->get('password');
+                $confirmPassword = (string) $request->request->get('confirm_password');
+
+                // Basic validation
+                if (empty($email) || empty($username) || empty($password) || empty($confirmPassword)) {
+                    $error = 'All fields are required.';
+                } elseif ($password !== $confirmPassword) {
+                    $error = 'Passwords do not match.';
+                } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $error = 'Invalid email address.';
+                } elseif ($entityManager->getRepository(User::class)->findOneBy(['email' => $email])) {
                     $error = 'An account with this email already exists.';
                 } elseif ($entityManager->getRepository(User::class)->findOneBy(['username' => $username])) {
                     $error = 'This username is already taken.';
@@ -51,19 +53,27 @@ class RegistrationController extends AbstractController
                     $user->setEmail($email);
                     $user->setUsername($username);
                     $user->setRoles(['ROLE_USER']);
-                    
+
                     // Hash the password
                     $hashedPassword = $passwordHasher->hashPassword($user, $password);
                     $user->setPassword($hashedPassword);
 
-                    // Persist to database
-                    $entityManager->persist($user);
-                    $entityManager->flush();
+                    try {
+                        $entityManager->persist($user);
+                        $entityManager->flush();
 
-                    // Redirect to login page after successful registration
-                    return $this->redirectToRoute('app_login');
+                        // Redirect to login page after successful registration
+                        return $this->redirectToRoute('app_login');
+                    } catch (UniqueConstraintViolationException) {
+                        // Database-level unique constraint hit (email/username already exists)
+                        $error = 'An account with this email or username already exists.';
+                    }
                 }
             }
+        }
+
+        if ($error) {
+            $this->addFlash('error', $error);
         }
 
         return $this->render('registration/register.html.twig', [
