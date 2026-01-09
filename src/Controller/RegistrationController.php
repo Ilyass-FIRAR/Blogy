@@ -39,10 +39,12 @@ class RegistrationController extends AbstractController
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $error = 'Invalid email address.';
             } else {
-                // Check if user already exists
-                $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-                if ($existingUser) {
+                // Check if email already exists
+                $existingUserByEmail = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+                if ($existingUserByEmail) {
                     $error = 'An account with this email already exists.';
+                } elseif ($entityManager->getRepository(User::class)->findOneBy(['username' => $username])) {
+                    $error = 'This username is already taken.';
                 } else {
                     // Create new user
                     $user = new User();
