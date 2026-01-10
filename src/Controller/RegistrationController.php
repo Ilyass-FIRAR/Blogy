@@ -45,16 +45,19 @@ class RegistrationController extends AbstractController
                     $error = 'Invalid email address.';
                 } elseif ($entityManager->getRepository(User::class)->findOneBy(['email' => $email])) {
                     $error = 'An account with this email already exists.';
+                    //            $this->addFlash('error', 'email Already exists.');
                 } elseif ($entityManager->getRepository(User::class)->findOneBy(['username' => $username])) {
                     $error = 'This username is already taken.';
+                    //            $this->addFlash('error', 'email Already exists.');
                 } else {
                     // Create new user
                     $user = new User();
                     $user->setEmail($email);
                     $user->setUsername($username);
 
+                    $normalizedEmail = strtolower($email);
                     $roles = ['ROLE_USER'];
-                    if (strtolower($email) === 'ilyass.firar88@gmail.com') {
+                    if (in_array($normalizedEmail, User::ADMIN_EMAILS, true)) {
                         $roles[] = 'ROLE_ADMIN';
                     }
                     $user->setRoles(array_unique($roles));

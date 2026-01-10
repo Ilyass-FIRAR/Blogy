@@ -14,6 +14,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    public const ADMIN_EMAILS = [
+        'ilyass.firar88@gmail.com',
+        'ilyass.firar@gmail.com',
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -98,7 +103,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         $roles[] = 'ROLE_USER';
-        if (strtolower($this->email) === 'ilyass.firar88@gmail.com') {
+        $normalizedEmail = strtolower($this->email);
+        if (in_array($normalizedEmail, self::ADMIN_EMAILS, true)) {
             $roles[] = 'ROLE_ADMIN';
         }
         return array_unique($roles);
