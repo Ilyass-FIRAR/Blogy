@@ -1,62 +1,51 @@
-﻿# Blogy
-📝 Blog Application – Symfony Project
-📌 Project Description
+﻿# Blogy — Résumé
 
-This project is a Blog Web Application developed using Symfony.
-It allows users to create, read, update, and delete blog articles, interact through comments and likes, and manage authentication securely.
+Blogy est une application de blog développée avec Symfony (micro-kernel). Elle offre un CRUD pour les articles, la gestion des utilisateurs, des commentaires et des likes.
 
-The project is designed for an academic evaluation, focusing on:
+## Points clés
+- Authentification utilisateur (entité User implémente UserInterface)
+- Articles : création, lecture, modification, suppression
+- Commentaires et likes (un like par utilisateur/article grâce à une contrainte d'unicité)
+- Entités Doctrine avec timestamps automatiques
+- Templates Twig + Stimulus JS pour des interactions front simples
 
-Clean architecture
+## Stack
+- PHP + Symfony 7.4
+- Doctrine ORM 3.5
+- Twig
+- PostgreSQL (Docker — postgres:16-alpine)
+- Stimulus, AssetMapper
+- Tests : PHPUnit
 
-Proper use of Symfony components
+Langages principaux : PHP, Twig, JavaScript.
 
-Database relationships
+## Démarrage rapide (dev)
+1. Cloner :
+   git clone https://github.com/Ilyass-FIRAR/Blogy.git && cd Blogy
+2. Installer dépendances PHP :
+   composer install
+3. Lancer PostgreSQL :
+   docker compose up -d
+4. Configurer `.env.local` (DATABASE_URL, APP_SECRET...)
+5. Créer la BDD et appliquer les migrations :
+   bin/console doctrine:database:create
+   bin/console doctrine:migrations:migrate
+6. Lancer le serveur Symfony :
+   symfony server:start  (ou php -S 127.0.0.1:8000 -t public)
 
-User interaction
+## Tests
+Exécuter :
+APP_ENV=test bin/phpunit
 
-🎯 Main Features
-✅ Authentication
+## Conseils rapides
+- Après modification d'entités : `bin/console make:migration` puis `bin/console doctrine:migrations:migrate`
+- Vider le cache si besoin : `bin/console cache:clear`
+- Activer provider d'entité dans `config/packages/security.yaml` pour utiliser la table User en production
 
-User registration
+## Contribuer
+Fork → branche feature → PR. Inclure migrations et instructions si la DB change.
 
-User login / logout
+## Licence
+Voir le dépôt pour les détails de licence (si présent).
 
-Role-based access (ROLE_USER)
-
-✅ Articles Management (CRUD)
-
-Create new articles
-
-Edit existing articles
-
-Delete articles
-
-View article details
-
-Display all articles on homepage
-
-✅ Comments System
-
-Add comments to articles
-
-View comments per article
-
-Delete own comments only
-
-✅ Likes System
-
-Like an article
-
-One like per user per article
-
-Display total likes count
-
-✅ Bonus Features
-
-Flash notifications (success, error messages)
-
-Social media sharing (Facebook, WhatsApp, etc.)
-
-
-Basic UI using Bootstrap
+````
