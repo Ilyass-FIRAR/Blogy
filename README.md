@@ -13,7 +13,7 @@ Blogy est une application de blog développée avec Symfony (micro-kernel). Elle
 - PHP + Symfony 7.4
 - Doctrine ORM 3.5
 - Twig
-- PostgreSQL (Docker — postgres:16-alpine)
+- Mysql (mariadb)
 - Stimulus, AssetMapper
 - Tests : PHPUnit
 
